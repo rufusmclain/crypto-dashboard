@@ -2,19 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#7c3aed">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
+    <meta name="theme-color" content="#1e293b">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="CryptoDash">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>Professional Crypto Dashboard</title>
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAACAAACAAAAAgIAAgAAAAIAAgACAgAAAwMDAAICAgAAAAP8AAP8AAAD//wD/AAAA/wD/AP//AAD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA">
-    
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" href="icon-192.png">
     <style>
         * {
             margin: 0;
@@ -27,8 +22,7 @@
             background: linear-gradient(135deg, #1e293b, #7c3aed, #1e293b);
             color: white;
             min-height: 100vh;
-            padding: 10px;
-            overflow-x: hidden;
+            padding: 20px;
         }
         
         .container {
@@ -38,11 +32,11 @@
         
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
         
         .title {
-            font-size: clamp(24px, 5vw, 36px);
+            font-size: 36px;
             font-weight: bold;
             background: linear-gradient(45deg, #10b981, #8b5cf6, #f59e0b);
             -webkit-background-clip: text;
@@ -52,20 +46,19 @@
         
         .subtitle {
             color: #d1d5db;
-            font-size: clamp(12px, 3vw, 16px);
-            margin-bottom: 15px;
+            font-size: 16px;
+            margin-bottom: 20px;
         }
         
         .status {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             background: rgba(15, 23, 42, 0.7);
-            padding: 6px 12px;
+            padding: 8px 16px;
             border-radius: 20px;
             border: 2px solid #10b981;
-            margin-bottom: 15px;
-            font-size: clamp(10px, 2.5vw, 14px);
+            margin-bottom: 20px;
         }
         
         .status-dot {
@@ -76,23 +69,34 @@
             animation: pulse 2s infinite;
         }
         
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        .profit-urgent {
+            animation: pulse-red 2s infinite;
+        }
+        
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.8); }
+        }
+        
+        .rotation-top {
+            animation: pulse-green 3s infinite;
+        }
+        
+        @keyframes pulse-green {
+            0%, 100% { box-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.8); }
         }
         
         .refresh-btn {
             background: #3b82f6;
             color: white;
             border: none;
-            padding: 10px 16px;
+            padding: 8px 16px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 500;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             transition: background-color 0.2s;
-            font-size: clamp(12px, 3vw, 14px);
-            touch-action: manipulation;
         }
         
         .refresh-btn:hover:not(:disabled) {
@@ -104,38 +108,16 @@
             cursor: not-allowed;
         }
         
-        .install-prompt {
-            background: rgba(16, 185, 129, 0.1);
-            border: 2px solid #10b981;
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 20px;
-            text-align: center;
-            display: none;
-        }
-        
-        .install-btn {
-            background: #10b981;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            margin-top: 8px;
-            touch-action: manipulation;
-        }
-        
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
         }
         
         .card {
             background: rgba(15, 23, 42, 0.95);
             border-radius: 16px;
-            padding: 16px;
+            padding: 20px;
             position: relative;
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -144,80 +126,80 @@
         }
         
         .card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-5px);
         }
         
         .recommendation-badge {
             position: absolute;
-            top: -8px;
-            right: 12px;
+            top: -10px;
+            right: 15px;
             color: white;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: clamp(9px, 2vw, 11px);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 11px;
             font-weight: bold;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
         
         .coin-info {
-            margin-top: 12px;
-            margin-bottom: 16px;
+            margin-top: 15px;
+            margin-bottom: 20px;
         }
         
         .coin-name {
-            font-size: clamp(14px, 4vw, 18px);
+            font-size: 18px;
             color: #f8fafc;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
         
         .price {
-            font-size: clamp(18px, 5vw, 24px);
+            font-size: 24px;
             font-weight: bold;
             color: #10b981;
-            margin-bottom: 4px;
+            margin-bottom: 5px;
         }
         
         .change {
-            font-size: clamp(12px, 3vw, 14px);
+            font-size: 14px;
             font-weight: bold;
         }
         
         .technical-box {
             background: rgba(139, 92, 246, 0.15);
             border: 1px solid rgba(139, 92, 246, 0.4);
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 12px;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 15px;
         }
         
         .signals-box {
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
         
         .signals-title {
-            font-size: clamp(11px, 2.5vw, 13px);
+            font-size: 13px;
             color: #fbbf24;
             font-weight: bold;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
         
         .signal {
-            font-size: clamp(9px, 2vw, 11px);
-            padding: 4px 6px;
+            font-size: 11px;
+            padding: 4px 8px;
             margin: 2px 0;
             background: rgba(71, 85, 105, 0.4);
-            border-radius: 4px;
+            border-radius: 6px;
             border-left: 3px solid;
         }
         
         .target {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
         
         .target-info {
             display: flex;
             justify-content: space-between;
-            font-size: clamp(10px, 2.5vw, 12px);
+            font-size: 12px;
             margin-bottom: 4px;
         }
         
@@ -230,36 +212,91 @@
         
         .progress-fill {
             height: 100%;
-            transition: width: 0.5s ease;
+            transition: width 0.5s ease;
         }
         
         .footer {
             text-align: center;
-            margin-top: 25px;
+            margin-top: 30px;
             color: #9ca3af;
-            font-size: clamp(10px, 2.5vw, 13px);
-            padding: 15px 0;
+            font-size: 13px;
+            padding: 20px 0;
         }
         
+        .rotation-box {
+            background: rgba(16, 185, 129, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .rotation-box h3 {
+            margin-bottom: 10px;
+        }
+
+        .rotation-box ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        .rotation-box li {
+            margin-bottom: 5px;
+        }
+
+        .chart-container {
+            height: 150px;
+            margin-bottom: 15px;
+            overflow: hidden; /* Prevent overflow */
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .summary {
+            background: rgba(16, 185, 129, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
         @media (max-width: 768px) {
             body {
-                padding: 8px;
+                padding: 15px;
             }
             .grid {
                 grid-template-columns: 1fr;
-                gap: 12px;
+                gap: 15px;
+            }
+            .title {
+                font-size: 28px;
+            }
+            .subtitle {
+                font-size: 14px;
             }
             .card {
-                padding: 12px;
+                padding: 15px;
+            }
+            .coin-name {
+                font-size: 16px;
+            }
+            .price {
+                font-size: 20px;
+            }
+            .chart-container {
+                height: 120px;
             }
         }
-        
+
         @media (max-width: 480px) {
-            .grid {
-                grid-template-columns: 1fr;
+            .refresh-btn {
+                width: 100%;
             }
-            .header {
-                margin-bottom: 15px;
+            .status {
+                flex-direction: column;
+                gap: 5px;
             }
         }
     </style>
@@ -267,66 +304,30 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1 class="title">🚀 Professional Crypto Dashboard</h1>
-            <p class="subtitle">Enhanced Elliott Wave + Technical Analysis</p>
+            <h1 class="title">💰 Professional Profit Maximization Dashboard</h1>
+            <p class="subtitle">Advanced Profit-Taking + Position Rotation Analytics</p>
             <div class="status" id="statusIndicator">
                 <div class="status-dot"></div>
                 <span id="statusText">Connecting to live market data...</span>
             </div>
             <button class="refresh-btn" id="refreshBtn">🔄 Refresh Live Data</button>
-            
-            <!-- PWA Install Prompt -->
-            <div class="install-prompt" id="installPrompt">
-                <div>📱 Install this app for the best experience!</div>
-                <button class="install-btn" id="installBtn">Install App</button>
-            </div>
         </div>
+        
+        <div id="summarySection" class="summary"></div>
+        
+        <div id="rotationSection"></div>
         
         <div class="grid" id="cryptoGrid">
             <!-- Cards will be generated here -->
         </div>
         
         <div class="footer">
-            <div>🏆 Professional Crypto Analysis Dashboard</div>
+            <div>💰 Professional Profit Maximization & Rotation Analytics</div>
             <div id="lastUpdate">Last Updated: Loading...</div>
         </div>
     </div>
 
     <script>
-        // PWA Install functionality
-        let deferredPrompt;
-        
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('installPrompt').style.display = 'block';
-        });
-        
-        document.getElementById('installBtn').addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    console.log('PWA installed');
-                    document.getElementById('installPrompt').style.display = 'none';
-                }
-                deferredPrompt = null;
-            }
-        });
-        
-        // Register Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then((registration) => {
-                        console.log('SW registered: ', registration);
-                    })
-                    .catch((registrationError) => {
-                        console.log('SW registration failed: ', registrationError);
-                    });
-            });
-        }
-
         // Global variables
         let cryptoData = [];
         let currentPrices = {};
@@ -335,24 +336,22 @@
         let lastFetchTime = null;
         let isLoading = false;
 
-        // Crypto configuration with current market prices (June 2025)
+        // Updated crypto configuration with historical lows/ATH for Fib
         const cryptoConfig = [
-            { symbol: 'ETH', name: 'Ethereum', basePrice: 2606, tp1: 4500, tp2: 7500, tp3: 12000, coingeckoId: 'ethereum' },
-            { symbol: 'XRP', name: 'XRP', basePrice: 2.35, tp1: 3.50, tp2: 6.00, tp3: 12.00, coingeckoId: 'ripple' },
-            { symbol: 'ADA', name: 'Cardano', basePrice: 0.89, tp1: 1.20, tp2: 2.80, tp3: 5.50, coingeckoId: 'cardano' },
-            { symbol: 'LINK', name: 'Chainlink', basePrice: 17.25, tp1: 35, tp2: 75, tp3: 150, coingeckoId: 'chainlink' },
-            { symbol: 'SOL', name: 'Solana', basePrice: 184, tp1: 400, tp2: 650, tp3: 1000, coingeckoId: 'solana' },
-            { symbol: 'VET', name: 'VeChain', basePrice: 0.041, tp1: 0.45, tp2: 0.85, tp3: 1.50, coingeckoId: 'vechain' },
-            { symbol: 'SUI', name: 'Sui', basePrice: 3.27, tp1: 8.00, tp2: 18.00, tp3: 35.00, coingeckoId: 'sui' },
-            { symbol: 'INJ', name: 'Injective', basePrice: 26.85, tp1: 45.00, tp2: 85.00, tp3: 150.00, coingeckoId: 'injective-protocol' },
-            { symbol: 'LTC', name: 'Litecoin', basePrice: 89.45, tp1: 180, tp2: 350, tp3: 600, coingeckoId: 'litecoin' }
+            { symbol: 'ETH', name: 'Ethereum', basePrice: 2606, tp1: 6000, tp2: 12000, tp3: 18000, coingeckoId: 'ethereum', risk: 'LOW', historicalLow: 880, historicalATH: 4878 },
+            { symbol: 'XRP', name: 'XRP', basePrice: 2.35, tp1: 6.00, tp2: 12.00, tp3: 24.00, coingeckoId: 'ripple', risk: 'MEDIUM', historicalLow: 0.15, historicalATH: 3.40 },
+            { symbol: 'ADA', name: 'Cardano', basePrice: 0.89, tp1: 2.50, tp2: 5.00, tp3: 10.00, coingeckoId: 'cardano', risk: 'MEDIUM', historicalLow: 0.25, historicalATH: 3.09 },
+            { symbol: 'LINK', name: 'Chainlink', basePrice: 17.25, tp1: 60, tp2: 120, tp3: 240, coingeckoId: 'chainlink', risk: 'MEDIUM', historicalLow: 5.50, historicalATH: 52.70 },
+            { symbol: 'SOL', name: 'Solana', basePrice: 184, tp1: 600, tp2: 1000, tp3: 1500, coingeckoId: 'solana', risk: 'HIGH', historicalLow: 13, historicalATH: 293.31 },
+            { symbol: 'VET', name: 'VeChain', basePrice: 0.041, tp1: 0.80, tp2: 1.60, tp3: 3.00, coingeckoId: 'vechain', risk: 'HIGH', historicalLow: 0.01, historicalATH: 0.281 },
+            { symbol: 'SUI', name: 'Sui', basePrice: 3.27, tp1: 12.00, tp2: 30.00, tp3: 60.00, coingeckoId: 'sui', risk: 'HIGH', historicalLow: 0.50, historicalATH: 5.35 }
         ];
 
         // Initialize with current prices
         function initializePrices() {
             cryptoConfig.forEach(crypto => {
                 currentPrices[crypto.symbol] = crypto.basePrice;
-                priceChanges[crypto.symbol] = (Math.random() - 0.3) * 10;
+                priceChanges[crypto.symbol] = (Math.random() - 0.3) * 10; // Realistic 24h changes
             });
         }
 
@@ -361,7 +360,7 @@
             const corsProxies = [
                 'https://corsproxy.io/?',
                 'https://api.allorigins.win/raw?url=',
-                ''
+                ''  // Direct attempt first
             ];
             
             for (const proxy of corsProxies) {
@@ -370,18 +369,10 @@
                     const baseUrl = `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`;
                     const url = proxy + encodeURIComponent(baseUrl);
                     
-                    console.log(`🔄 Trying ${proxy ? 'CORS proxy' : 'direct'} connection...`);
-                    
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 8000);
-                    
                     const response = await fetch(proxy ? url : baseUrl, {
                         method: 'GET',
-                        headers: { 'Accept': 'application/json' },
-                        signal: controller.signal
+                        headers: { 'Accept': 'application/json' }
                     });
-                    
-                    clearTimeout(timeoutId);
                     
                     if (!response.ok) throw new Error(`HTTP ${response.status}`);
                     
@@ -406,29 +397,30 @@
                     
                 } catch (error) {
                     console.log(`❌ ${proxy ? 'Proxy' : 'Direct'} failed:`, error.message);
-                    continue;
+                    continue; // Try next proxy
                 }
             }
             
+            // All proxies failed - use enhanced demo mode
             console.log('🔄 All connections failed, using enhanced demo mode');
             apiStatus = 'demo-mode';
             
             const priceVariations = {
-                'ETH': { min: 2580, max: 2650, volatility: 0.02 },
-                'XRP': { min: 2.20, max: 2.45, volatility: 0.03 },
-                'ADA': { min: 0.85, max: 0.95, volatility: 0.04 },
-                'LINK': { min: 16.50, max: 18.20, volatility: 0.03 },
-                'SOL': { min: 175, max: 195, volatility: 0.04 },
-                'VET': { min: 0.038, max: 0.045, volatility: 0.05 },
-                'SUI': { min: 3.10, max: 3.50, volatility: 0.04 },
-                'INJ': { min: 25.00, max: 29.50, volatility: 0.04 },
-                'LTC': { min: 85, max: 95, volatility: 0.03 }
+                'ETH': { min: 2500, max: 2700, volatility: 0.03 },
+                'XRP': { min: 2.0, max: 2.5, volatility: 0.04 },
+                'ADA': { min: 0.8, max: 1.0, volatility: 0.04 },
+                'LINK': { min: 16, max: 18, volatility: 0.03 },
+                'SOL': { min: 170, max: 200, volatility: 0.04 },
+                'VET': { min: 0.035, max: 0.045, volatility: 0.05 },
+                'SUI': { min: 3.0, max: 3.5, volatility: 0.04 }
             };
             
             cryptoConfig.forEach(crypto => {
                 const variation = priceVariations[crypto.symbol];
                 const randomPrice = variation.min + (Math.random() * (variation.max - variation.min));
                 currentPrices[crypto.symbol] = randomPrice;
+                
+                // More realistic 24h changes (-5% to +8% with slight bullish bias)
                 priceChanges[crypto.symbol] = (Math.random() - 0.35) * 13;
             });
             
@@ -436,17 +428,122 @@
             return false;
         }
 
-        function updateDemoPrices() {
-            if (apiStatus === 'demo-mode') {
-                cryptoConfig.forEach(crypto => {
-                    const currentPrice = currentPrices[crypto.symbol];
-                    const movement = (Math.random() - 0.5) * 0.01;
-                    currentPrices[crypto.symbol] = currentPrice * (1 + movement);
-                    priceChanges[crypto.symbol] += (Math.random() - 0.5) * 0.5;
+        // Fetch historical data for charts
+        async function fetchHistoricalPrices(coingeckoId) {
+            try {
+                const baseUrl = `https://api.coingecko.com/api/v3/coins/${coingeckoId}/market_chart?vs_currency=usd&days=30`;
+                const response = await fetch(baseUrl);
+                if (!response.ok) throw new Error('Failed to fetch historical data');
+                const data = await response.json();
+                return data.prices.map(p => ({ time: p[0], price: p[1] })); // [timestamp, price]
+            } catch (error) {
+                console.log('Historical fetch failed for ' + coingeckoId + ', using demo data');
+                // Demo data: 30 points with realistic variation
+                const crypto = cryptoConfig.find(c => c.coingeckoId === coingeckoId);
+                let price = crypto.basePrice;
+                return Array.from({length: 30}, (_, i) => {
+                    price += (Math.random() - 0.5) * crypto.basePrice * 0.1; // 10% variation for visibility
+                    return { time: Date.now() - i * 86400000, price: Math.max(crypto.basePrice * 0.5, price) };
                 });
             }
         }
 
+        // Draw chart with Canvas
+        async function drawChart(symbol, canvasId) {
+            const crypto = cryptoConfig.find(c => c.symbol === symbol);
+            const historical = await fetchHistoricalPrices(crypto.coingeckoId);
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.parentElement.offsetWidth - 40; // Padding to prevent overflow
+            canvas.height = 150;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Find min/max price for scaling with buffer
+            const prices = historical.map(h => h.price);
+            let minPrice = Math.min(...prices);
+            let maxPrice = Math.max(...prices);
+            const priceRange = maxPrice - minPrice || 1;
+            minPrice -= priceRange * 0.1; // 10% buffer below
+            maxPrice += priceRange * 0.1; // 10% buffer above
+            const chartRange = maxPrice - minPrice;
+
+            // Draw price line with padding
+            const paddingX = 10;
+            ctx.beginPath();
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 2;
+            historical.forEach((point, i) => {
+                const x = paddingX + (i / (historical.length - 1)) * (canvas.width - 2 * paddingX);
+                const y = canvas.height - ((point.price - minPrice) / chartRange) * canvas.height;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+
+            // Calculate Fib levels (extension from historical low to ATH)
+            const fibRatios = [1.272, 1.618, 2.618];
+            const fibLevels = fibRatios.map(r => crypto.historicalATH + (crypto.historicalATH - crypto.historicalLow) * (r - 1));
+
+            // Draw Fib lines (dashed horizontal) if within chart range, else label at edge
+            ctx.setLineDash([5, 5]);
+            fibLevels.forEach((level, i) => {
+                let y = canvas.height - ((level - minPrice) / chartRange) * canvas.height;
+                const colors = ['#fbbf24', '#10b981', '#8b5cf6'][i];
+                ctx.strokeStyle = colors;
+                ctx.fillStyle = colors;
+                ctx.font = '10px Arial';
+                const precision = level < 1 ? 4 : (level < 10 ? 2 : 0);
+                const label = `Fib ${fibRatios[i]}: ${level.toFixed(precision)}`;
+                
+                if (y > canvas.height) {
+                    // Below chart
+                    y = canvas.height;
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(canvas.width, y);
+                    ctx.stroke();
+                    ctx.fillText(label + ' (below)', paddingX, y - 5);
+                } else if (y < 0) {
+                    // Above chart
+                    y = 0;
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(canvas.width, y);
+                    ctx.stroke();
+                    ctx.fillText(label + ' (above)', paddingX, y + 15);
+                } else {
+                    // Within
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(canvas.width, y);
+                    ctx.stroke();
+                    let labelY = y - 5;
+                    if (labelY < 10) labelY = 15; // Clamp to avoid overlap/top edge
+                    if (labelY > canvas.height - 10) labelY = canvas.height - 15; // Bottom clamp
+                    ctx.fillText(label, paddingX, labelY);
+                }
+            });
+            ctx.setLineDash([]);
+        }
+
+        // Enhanced demo mode with price evolution
+        function updateDemoPrices() {
+            if (apiStatus === 'demo-mode') {
+                // Simulate small price movements for more realistic feel
+                cryptoConfig.forEach(crypto => {
+                    const currentPrice = currentPrices[crypto.symbol];
+                    // Small random movement ±0.5%
+                    const movement = (Math.random() - 0.5) * 0.01;
+                    currentPrices[crypto.symbol] = currentPrice * (1 + movement);
+                    
+                    // Update 24h change slightly
+                    priceChanges[crypto.symbol] += (Math.random() - 0.5) * 0.5;
+                });
+            }
+        }
         function getRandomTechnicals() {
             const recommendations = ['STRONG BUY', 'BUY', 'HOLD', 'WEAK SELL'];
             const trends = ['BULLISH', 'BEARISH', 'NEUTRAL'];
@@ -461,6 +558,80 @@
             };
         }
 
+        // Calculate profit-taking and rotation metrics
+        function calculateProfitMetrics(crypto, currentPrice, technicals) {
+            const progressTP1 = Math.min((currentPrice / crypto.tp1) * 100, 100);
+            const progressTP2 = Math.min((currentPrice / crypto.tp2) * 100, 100);
+            const progressTP3 = Math.min((currentPrice / crypto.tp3) * 100, 100);
+            
+            // Calculate upside potential to each target
+            const upsideTP1 = Math.max(0, ((crypto.tp1 - currentPrice) / currentPrice) * 100);
+            const upsideTP2 = Math.max(0, ((crypto.tp2 - currentPrice) / currentPrice) * 100);
+            const upsideTP3 = Math.max(0, ((crypto.tp3 - currentPrice) / currentPrice) * 100);
+            
+            // Profit-taking urgency (higher = more urgent to take profits)
+            let profitUrgency = 0;
+            let profitAction = 'HOLD';
+            
+            if (progressTP1 >= 95) {
+                profitUrgency = 95;
+                profitAction = 'TAKE PROFITS NOW';
+            } else if (progressTP1 >= 85) {
+                profitUrgency = 80;
+                profitAction = 'SCALE OUT 25%';
+            } else if (progressTP1 >= 75) {
+                profitUrgency = 60;
+                profitAction = 'PREPARE TO SELL';
+            } else if (progressTP2 >= 90) {
+                profitUrgency = 85;
+                profitAction = 'TAKE PROFITS 50%';
+            } else if (progressTP3 >= 85) {
+                profitUrgency = 90;
+                profitAction = 'MAJOR PROFIT TAKING';
+            }
+            
+            // Add RSI overbought urgency
+            if (technicals.rsi > 75) profitUrgency += 15;
+            if (technicals.rsi > 80) profitUrgency += 25;
+            
+            // Rotation Score (higher = better rotation candidate)
+            let rotationScore = 0;
+            
+            // High upside potential
+            if (upsideTP1 > 50) rotationScore += 30;
+            if (upsideTP1 > 75) rotationScore += 20;
+            if (upsideTP1 > 100) rotationScore += 25;
+            
+            // Low current progress (more room to run)
+            if (progressTP1 < 30) rotationScore += 25;
+            if (progressTP1 < 50) rotationScore += 15;
+            
+            // Technical strength
+            if (technicals.rsi < 35) rotationScore += 20;
+            if (technicals.trend === 'BULLISH') rotationScore += 15;
+            if (technicals.confidence > 70) rotationScore += 10;
+            
+            // Risk adjustment
+            const riskMultiplier = crypto.risk === 'LOW' ? 1.1 : crypto.risk === 'MEDIUM' ? 1.0 : 0.9;
+            rotationScore = Math.round(rotationScore * riskMultiplier);
+            
+            // Expected return calculation (risk-adjusted)
+            const expectedReturn = (upsideTP1 * 0.6 + upsideTP2 * 0.3 + upsideTP3 * 0.1) * riskMultiplier;
+            
+            return {
+                progressTP1,
+                progressTP2, 
+                progressTP3,
+                upsideTP1: Math.round(upsideTP1),
+                upsideTP2: Math.round(upsideTP2),
+                upsideTP3: Math.round(upsideTP3),
+                profitUrgency: Math.min(100, profitUrgency),
+                profitAction,
+                rotationScore: Math.min(100, rotationScore),
+                expectedReturn: Math.round(expectedReturn),
+                riskLevel: crypto.risk
+            };
+        }
         function generateSignals(technicals) {
             const signals = [];
             
@@ -487,6 +658,33 @@
             return signals.slice(0, 5);
         }
 
+        // Get profit-focused recommendation
+        function getProfitRecommendation(profitMetrics, technicals) {
+            // Priority 1: Profit-taking actions
+            if (profitMetrics.profitUrgency >= 85) {
+                return { action: 'TAKE PROFITS', color: '#ef4444', confidence: 95 };
+            } else if (profitMetrics.profitUrgency >= 70) {
+                return { action: 'SCALE OUT', color: '#f97316', confidence: 85 };
+            } else if (profitMetrics.profitUrgency >= 60) {
+                return { action: 'PREPARE SELL', color: '#fbbf24', confidence: 75 };
+            }
+            
+            // Priority 2: Rotation opportunities
+            if (profitMetrics.rotationScore >= 85) {
+                return { action: 'TOP PICK', color: '#10b981', confidence: 90 };
+            } else if (profitMetrics.rotationScore >= 70) {
+                return { action: 'STRONG BUY', color: '#34d399', confidence: 80 };
+            } else if (profitMetrics.rotationScore >= 55) {
+                return { action: 'BUY', color: '#22c55e', confidence: 70 };
+            }
+            
+            // Priority 3: Standard hold/avoid
+            if (technicals.rsi > 75 || technicals.trend === 'BEARISH') {
+                return { action: 'AVOID', color: '#6b7280', confidence: 60 };
+            }
+            
+            return { action: 'HOLD', color: '#fbbf24', confidence: 50 };
+        }
         function getRecommendationColor(rec) {
             const colors = {
                 'STRONG BUY': '#10b981',
@@ -498,27 +696,31 @@
             return colors[rec] || '#6b7280';
         }
 
+        // Create profit-focused crypto card HTML
         function createCryptoCard(crypto) {
             const technicals = getRandomTechnicals();
             const currentPrice = currentPrices[crypto.symbol] || crypto.basePrice;
             const change24h = priceChanges[crypto.symbol] || 0;
+            const profitMetrics = calculateProfitMetrics(crypto, currentPrice, technicals);
+            const recommendation = getProfitRecommendation(profitMetrics, technicals);
             const signals = generateSignals(technicals);
             
-            const progressTP1 = Math.min((currentPrice / crypto.tp1) * 100, 100);
-            const progressTP2 = Math.min((currentPrice / crypto.tp2) * 100, 100);
-            const progressTP3 = Math.min((currentPrice / crypto.tp3) * 100, 100);
-            
-            const recColor = getRecommendationColor(technicals.recommendation);
-            
             return `
-                <div class="card" style="border-color: ${recColor}">
-                    <div class="recommendation-badge" style="background: ${recColor}">
-                        ${technicals.recommendation}
+                <div class="card" style="border-color: ${recommendation.color}">
+                    <div class="recommendation-badge" style="background: ${recommendation.color}">
+                        ${recommendation.action}
                     </div>
+                    
+                    <!-- Profit Urgency Indicator -->
+                    ${profitMetrics.profitUrgency >= 60 ? `
+                        <div style="position: absolute; top: -10px; left: 15px; background: ${profitMetrics.profitUrgency >= 80 ? '#ef4444' : '#f97316'}; color: white; padding: 4px 8px; border-radius: 10px; font-size: 10px; font-weight: bold;">
+                            ${profitMetrics.profitAction}
+                        </div>
+                    ` : ''}
                     
                     <div class="coin-info">
                         <h3 class="coin-name">${crypto.name} (${crypto.symbol})</h3>
-                        <div class="price">$${currentPrice.toLocaleString(undefined, {
+                        <div class="price">${currentPrice.toLocaleString(undefined, {
                             minimumFractionDigits: currentPrice < 1 ? 4 : 2,
                             maximumFractionDigits: currentPrice < 1 ? 4 : 2
                         })}</div>
@@ -527,42 +729,74 @@
                         </div>
                     </div>
                     
+                    <!-- Chart Container -->
+                    <div class="chart-container">
+                        <canvas id="chart-${crypto.symbol}"></canvas>
+                    </div>
+                    
+                    <!-- Profit Metrics Box -->
+                    <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 10px; padding: 12px; margin-bottom: 15px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px;">
+                            <div>
+                                <span style="color: #10b981; font-weight: bold;">Upside TP1:</span>
+                                <span style="color: #e2e8f0;"> +${profitMetrics.upsideTP1}%</span>
+                            </div>
+                            <div>
+                                <span style="color: #8b5cf6; font-weight: bold;">Rotation Score:</span>
+                                <span style="color: #e2e8f0;"> ${profitMetrics.rotationScore}/100</span>
+                            </div>
+                            <div>
+                                <span style="color: #fbbf24; font-weight: bold;">Expected Return:</span>
+                                <span style="color: #e2e8f0;"> +${profitMetrics.expectedReturn}%</span>
+                            </div>
+                            <div>
+                                <span style="color: ${crypto.risk === 'LOW' ? '#10b981' : crypto.risk === 'MEDIUM' ? '#fbbf24' : '#ef4444'}; font-weight: bold;">Risk:</span>
+                                <span style="color: #e2e8f0;"> ${crypto.risk}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Technical Summary -->
                     <div class="technical-box">
-                        <div style="font-size: clamp(11px, 2.5vw, 13px); margin-bottom: 6px; color: #e2e8f0;">
+                        <div style="font-size: 13px; margin-bottom: 6px; color: #e2e8f0;">
                             RSI: ${technicals.rsi} | Trend: ${technicals.trend}
                         </div>
-                        <div style="font-size: clamp(10px, 2vw, 12px); color: #a855f7;">
+                        <div style="font-size: 12px; color: #a855f7;">
                             Elliott: ${technicals.pattern} (${technicals.confidence}%)
                         </div>
                     </div>
                     
+                    <!-- Profit-Focused Signals -->
                     <div class="signals-box">
-                        <div class="signals-title">🎯 Trading Signals (${signals.length})</div>
+                        <div class="signals-title">🎯 Profit Signals (${signals.length})</div>
                         ${signals.map(signal => `
-                            <div class="signal" style="color: ${signal.color}; border-left-color: ${signal.color}">
+                            <div class="signal" style="color: ${signal.color}; border-left-color: ${signal.color};">
                                 ${signal.text}
                             </div>
                         `).join('')}
                     </div>
                     
+                    <!-- Enhanced Target Progress -->
                     ${['TP1', 'TP2', 'TP3'].map((tp, i) => {
-                        const progress = [progressTP1, progressTP2, progressTP3][i];
+                        const progress = [profitMetrics.progressTP1, profitMetrics.progressTP2, profitMetrics.progressTP3][i];
+                        const upside = [profitMetrics.upsideTP1, profitMetrics.upsideTP2, profitMetrics.upsideTP3][i];
                         const value = [crypto.tp1, crypto.tp2, crypto.tp3][i];
                         const colors = ['#fbbf24', '#10b981', '#8b5cf6'][i];
                         const reached = progress >= 100;
+                        const nearTarget = progress >= 85;
                         
                         return `
-                            <div class="target" style="opacity: ${reached ? 0.7 : 1}">
+                            <div class="target" style="opacity: ${reached ? 0.7 : 1}; ${nearTarget && !reached ? 'border: 2px solid #f97316; border-radius: 8px; padding: 4px;' : ''}">
                                 <div class="target-info">
                                     <span style="color: ${colors}; font-weight: bold;">
-                                        ${tp}: $${value.toLocaleString()}
+                                        ${tp}: ${value.toLocaleString(undefined, { minimumFractionDigits: value < 1 ? 2 : 0, maximumFractionDigits: value < 1 ? 2 : 0 })} ${nearTarget && !reached ? '⚠️' : ''}
                                     </span>
-                                    <span style="color: ${reached ? '#10b981' : '#d1d5db'}; font-weight: ${reached ? 'bold' : 'normal'};">
-                                        ${Math.min(progress, 100).toFixed(0)}%${reached ? ' ✅' : ''}
+                                    <span style="color: ${reached ? '#10b981' : nearTarget ? '#f97316' : '#d1d5db'}; font-weight: ${reached || nearTarget ? 'bold' : 'normal'};">
+                                        ${reached ? '100% ✅' : `${Math.min(progress, 100).toFixed(0)}% (+${upside}%)`}
                                     </span>
                                 </div>
                                 <div class="progress-bar">
-                                    <div class="progress-fill" style="background: ${reached ? '#10b981' : colors}; width: ${Math.min(progress, 100)}%"></div>
+                                    <div class="progress-fill" style="background: ${reached ? '#10b981' : nearTarget ? '#f97316' : colors}; width: ${Math.min(progress, 100)}%"></div>
                                 </div>
                             </div>
                         `;
@@ -571,6 +805,7 @@
             `;
         }
 
+        // Update status indicator with better messaging
         function updateStatus(isLive) {
             const statusIndicator = document.getElementById('statusIndicator');
             const statusText = document.getElementById('statusText');
@@ -587,6 +822,7 @@
             }
         }
 
+        // Main update function with profit-focused sorting
         async function updateData() {
             if (isLoading) return;
             
@@ -594,39 +830,138 @@
             const refreshBtn = document.getElementById('refreshBtn');
             const grid = document.getElementById('cryptoGrid');
             const lastUpdate = document.getElementById('lastUpdate');
+            const summarySection = document.getElementById('summarySection');
             
             refreshBtn.disabled = true;
             refreshBtn.textContent = '🔄 Updating...';
             
+            // Fetch live prices or update demo prices
             const liveDataSuccess = await fetchLivePrices();
             
+            // If in demo mode, add small price movements for realism
             if (!liveDataSuccess) {
                 updateDemoPrices();
             }
             
+            // Update status
             updateStatus(liveDataSuccess);
             
-            grid.innerHTML = '';
-            cryptoConfig.forEach(crypto => {
-                grid.innerHTML += createCryptoCard(crypto);
+            // Generate card data with profit metrics
+            const cardData = cryptoConfig.map(crypto => {
+                const technicals = getRandomTechnicals();
+                const currentPrice = currentPrices[crypto.symbol] || crypto.basePrice;
+                const profitMetrics = calculateProfitMetrics(crypto, currentPrice, technicals);
+                const recommendation = getProfitRecommendation(profitMetrics, technicals);
+                
+                return {
+                    crypto,
+                    profitMetrics,
+                    recommendation,
+                    sortScore: profitMetrics.profitUrgency >= 70 ? (100 - profitMetrics.profitUrgency) : profitMetrics.rotationScore
+                };
             });
             
+            // Sort by profit urgency (urgent profits first) then by rotation score (best opportunities)
+            cardData.sort((a, b) => {
+                if (a.profitMetrics.profitUrgency >= 70 && b.profitMetrics.profitUrgency >= 70) {
+                    return b.profitMetrics.profitUrgency - a.profitMetrics.profitUrgency; // Higher urgency first
+                } else if (a.profitMetrics.profitUrgency >= 70) {
+                    return -1; // Profit urgency always comes first
+                } else if (b.profitMetrics.profitUrgency >= 70) {
+                    return 1;
+                } else {
+                    return b.profitMetrics.rotationScore - a.profitMetrics.rotationScore; // Higher rotation score first
+                }
+            });
+
+            // Generate portfolio summary
+            const totalReturn = cardData.reduce((sum, d) => sum + d.profitMetrics.expectedReturn, 0) / cardData.length;
+            const topLeader = cardData.sort((a,b) => b.profitMetrics.profitUrgency - a.profitMetrics.profitUrgency)[0]?.crypto.symbol || 'N/A';
+            const topLaggard = cardData.sort((a,b) => b.profitMetrics.rotationScore - a.profitMetrics.rotationScore)[0]?.crypto.symbol || 'N/A';
+            summarySection.innerHTML = `
+                <p>Avg Expected Return: ${totalReturn.toFixed(2)}% | Top Leader: ${topLeader} | Top Laggard: ${topLaggard}</p>
+            `;
+
+            // Generate rotation suggestions
+            let rotationSuggestions = '';
+            const urgentCoins = cardData.filter(d => d.profitMetrics.profitUrgency >= 70).map(d => d.crypto.symbol);
+            const candidateCoins = cardData.filter(d => d.profitMetrics.rotationScore >= 70).map(d => d.crypto.symbol);
+
+            if (urgentCoins.length > 0 && candidateCoins.length > 0) {
+                rotationSuggestions = '<div class="rotation-box">';
+                rotationSuggestions += '<h3>🔄 Rotation Recommendations</h3>';
+                rotationSuggestions += '<p>Rotate profits from overperforming coins to those with remaining upside potential. Ideal ratio: 20-30% per rotation.</p>';
+                rotationSuggestions += '<ul>';
+                urgentCoins.forEach((urgent, index) => {
+                    const candidate = candidateCoins[index % candidateCoins.length];
+                    rotationSuggestions += `<li>Rotate 25% from ${urgent} to ${candidate}</li>`;
+                });
+                rotationSuggestions += '</ul></div>';
+            }
+            document.getElementById('rotationSection').innerHTML = rotationSuggestions;
+            
+            // Generate sorted cards
+            grid.innerHTML = '';
+            for (const data of cardData) {
+                const cardHtml = createCryptoCard(data.crypto);
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = cardHtml;
+                const cardElement = tempDiv.firstElementChild;
+                
+                // Add special CSS classes for visual emphasis
+                if (data.profitMetrics.profitUrgency >= 80) {
+                    cardElement.classList.add('profit-urgent');
+                } else if (data.profitMetrics.rotationScore >= 80) {
+                    cardElement.classList.add('rotation-top');
+                }
+                
+                grid.appendChild(cardElement);
+                
+                // Draw chart after append
+                await drawChart(data.crypto.symbol, `chart-${data.crypto.symbol}`);
+            }
+            
+            // Update footer
             const updateTime = lastFetchTime || new Date();
             const modeText = liveDataSuccess ? 'Live API Data' : 'Professional Demo Mode';
-            lastUpdate.textContent = `Last Updated: ${updateTime.toLocaleTimeString()} | ${modeText} | Next update: 2min`;
+            lastUpdate.textContent = `Last Updated: ${updateTime.toLocaleTimeString()} | ${modeText} | Sorted by Profit Potential`;
             
             refreshBtn.disabled = false;
             refreshBtn.textContent = '🔄 Refresh Data';
             isLoading = false;
         }
 
+        // Enhanced demo mode with price evolution  
+        function updateDemoPrices() {
+            cryptoConfig.forEach(crypto => {
+                const currentPrice = currentPrices[crypto.symbol];
+                // Small random movement ±0.5%
+                const movement = (Math.random() - 0.5) * 0.01;
+                currentPrices[crypto.symbol] = currentPrice * (1 + movement);
+                
+                // Update 24h change slightly  
+                priceChanges[crypto.symbol] += (Math.random() - 0.5) * 0.5;
+            });
+        }
+
+        // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
             initializePrices();
             updateData();
             
+            // Setup refresh button
             document.getElementById('refreshBtn').addEventListener('click', updateData);
+            
+            // Auto-refresh every 2 minutes
             setInterval(updateData, 120000);
         });
+
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('Service Worker registered', reg))
+            .catch(err => console.log('Service Worker registration failed', err));
+        }
     </script>
 </body>
 </html>
