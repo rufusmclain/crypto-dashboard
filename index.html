@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
     <meta name="theme-color" content="#1e293b">
-    <meta name="mobile-web-app-capable" content="yes"> <!-- Updated from deprecated meta -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>Professional Crypto Dashboard</title>
     <link rel="manifest" href="/manifest.json">
@@ -41,6 +41,7 @@
     </div>
 
     <script>
+        // Global variables
         let cryptoData = [];
         let currentPrices = {};
         let priceChanges = {};
@@ -48,6 +49,7 @@
         let lastFetchTime = null;
         let isLoading = false;
 
+        // Updated crypto configuration (new TPs for SUI based on $3.71 current)
         const cryptoConfig = [
             { symbol: 'ETH', name: 'Ethereum', basePrice: 3500, tp1: 5250, tp2: 10500, tp3: 15750, coingeckoId: 'ethereum', risk: 'LOW', historicalLow: 880, historicalATH: 4878, rotate: true },
             { symbol: 'XRP', name: 'XRP', basePrice: 2.80, tp1: 4.20, tp2: 8.40, tp3: 12.60, coingeckoId: 'ripple', risk: 'MEDIUM', historicalLow: 0.15, historicalATH: 3.40, rotate: true },
@@ -55,20 +57,27 @@
             { symbol: 'LINK', name: 'Chainlink', basePrice: 18.50, tp1: 27.75, tp2: 55.50, tp3: 83.25, coingeckoId: 'chainlink', risk: 'MEDIUM', historicalLow: 5.50, historicalATH: 52.70, rotate: true },
             { symbol: 'SOL', name: 'Solana', basePrice: 175, tp1: 262.50, tp2: 525, tp3: 787.50, coingeckoId: 'solana', risk: 'HIGH', historicalLow: 13, historicalATH: 293.31, rotate: true },
             { symbol: 'VET', name: 'VeChain', basePrice: 0.03, tp1: 0.045, tp2: 0.09, tp3: 0.135, coingeckoId: 'vechain', risk: 'HIGH', historicalLow: 0.01, historicalATH: 0.281, rotate: true },
-            { symbol: 'SUI', name: 'Sui', basePrice: 0.85, tp1: 1.275, tp2: 2.55, tp3: 3.825, coingeckoId: 'sui', risk: 'HIGH', historicalLow: 0.50, historicalATH: 5.35, rotate: true },
+            { symbol: 'SUI', name: 'Sui', basePrice: 3.71, tp1: 5.565, tp2: 11.13, tp3: 16.695, coingeckoId: 'sui', risk: 'HIGH', historicalLow: 0.50, historicalATH: 5.35, rotate: true },
             { symbol: 'COIN', name: 'Coinbase', basePrice: 200, tp1: 300, tp2: 600, tp3: 900, coingeckoId: 'coinbase-global-inc', risk: 'MEDIUM', historicalLow: 46.33, historicalATH: 429.54, rotate: false },
             { symbol: 'TSLA', name: 'Tesla', basePrice: 250, tp1: 375, tp2: 750, tp3: 1125, coingeckoId: 'tesla-inc', risk: 'MEDIUM', historicalLow: 23.74, historicalATH: 409.97, rotate: false }
         ];
 
+        // Initialize with current prices
         function initializePrices() {
             cryptoConfig.forEach(crypto => {
                 currentPrices[crypto.symbol] = crypto.basePrice;
-                priceChanges[crypto.symbol] = (Math.random() - 0.3) * 10;
+                priceChanges[crypto.symbol] = (Math.random() - 0.3) * 10; // Realistic 24h changes
             });
         }
 
+        // Fetch live prices with CORS proxy fallback
         async function fetchLivePrices() {
-            const corsProxies = ['https://corsproxy.io/?', 'https://api.allorigins.win/raw?url=', ''];
+            const corsProxies = [
+                'https://corsproxy.io/?',
+                'https://api.allorigins.win/raw?url=',
+                ''  // Direct attempt first
+            ];
+            
             for (const proxy of corsProxies) {
                 try {
                     const ids = cryptoConfig.map(c => c.coingeckoId).join(',');
@@ -80,17 +89,11 @@
                         headers: { 'Accept': 'application/json' }
                     });
                     
-                    if (!response.ok) {
-                        if (response.status === 429) {
-                            console.log('Rate limit hit—retrying in 15 seconds');
-                            await new Promise(resolve => setTimeout(resolve, 15000));
-                            continue;
-                        }
-                        throw new Error(`HTTP ${response.status}`);
-                    }
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
                     
                     const data = await response.json();
                     let updated = false;
+                    
                     cryptoConfig.forEach(crypto => {
                         const coinData = data[crypto.coingeckoId];
                         if (coinData && coinData.usd) {
@@ -99,19 +102,24 @@
                             updated = true;
                         }
                     });
+                    
                     if (updated) {
                         apiStatus = 'live-data';
                         lastFetchTime = new Date();
                         console.log('✅ Successfully fetched LIVE PRICES!', currentPrices);
                         return true;
                     }
+                    
                 } catch (error) {
                     console.log(`❌ ${proxy ? 'Proxy' : 'Direct'} failed:`, error.message);
-                    continue;
+                    continue; // Try next proxy
                 }
             }
+            
+            // All proxies failed - use enhanced demo mode
             console.log('🔄 All connections failed, using enhanced demo mode');
             apiStatus = 'demo-mode';
+            
             const priceVariations = {
                 'ETH': { min: 3400, max: 3600, volatility: 0.03 },
                 'XRP': { min: 2.6, max: 3.0, volatility: 0.04 },
@@ -119,20 +127,23 @@
                 'LINK': { min: 18, max: 19, volatility: 0.03 },
                 'SOL': { min: 170, max: 180, volatility: 0.04 },
                 'VET': { min: 0.029, max: 0.031, volatility: 0.05 },
-                'SUI': { min: 0.8, max: 0.9, volatility: 0.04 },
+                'SUI': { min: 3.5, max: 3.9, volatility: 0.04 },
                 'COIN': { min: 195, max: 205, volatility: 0.03 },
                 'TSLA': { min: 245, max: 255, volatility: 0.03 }
             };
+            
             cryptoConfig.forEach(crypto => {
                 const variation = priceVariations[crypto.symbol];
                 const randomPrice = variation.min + (Math.random() * (variation.max - variation.min));
                 currentPrices[crypto.symbol] = randomPrice;
                 priceChanges[crypto.symbol] = (Math.random() - 0.35) * 13;
             });
+            
             lastFetchTime = new Date();
             return false;
         }
 
+        // Fetch historical data for charts
         async function fetchHistoricalPrices(coingeckoId) {
             try {
                 const baseUrl = `https://api.coingecko.com/api/v3/coins/${coingeckoId}/market_chart?vs_currency=usd&days=30`;
@@ -151,6 +162,7 @@
             }
         }
 
+        // Draw chart with Canvas
         async function drawChart(symbol, canvasId) {
             const crypto = cryptoConfig.find(c => c.symbol === symbol);
             const historical = await fetchHistoricalPrices(crypto.coingeckoId);
